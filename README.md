@@ -1,11 +1,11 @@
-# file-store
+# csv-file-store
 
 ## Description
 This is a simple http server for storing csv files.
 
 ## Usage
 To start the server, run the following command:
-```go run ./cmd/file-store```
+```go run ./cmd/csv-file-store```
 
 The server will start on port 8080 by default.
 
