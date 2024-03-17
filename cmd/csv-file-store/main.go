@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -16,14 +17,16 @@ import (
 )
 
 var (
-	port     int
-	workers  int64
-	logLevel string
+	port      int
+	workers   int64
+	logLevel  string
+	directory string
 )
 
 func init() {
 	flag.IntVar(&port, "port", 8080, "Port to listen on")
 	flag.Int64Var(&workers, "workers", 5, "Number of workers")
+	flag.StringVar(&directory, "directory", "./files", "Directory to store files")
 	flag.StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error, fatal, panic)")
 }
 
@@ -44,9 +47,20 @@ func main() {
 
 	zerolog.SetGlobalLevel(l)
 
+	// If directory does not exist, create it
+	_, err = os.Open(directory)
+	if os.IsNotExist(err) {
+		err = os.Mkdir(directory, 0755)
+		if err != nil {
+			logger.Fatal().Err(err).Msg("creating directory")
+		}
+	} else if err != nil {
+		logger.Fatal().Err(err).Msg("opening directory")
+	}
+
 	// Allows for the storage to be swapped out for gcs, s3, etc
 	getStorage := func() storage.Storage {
-		return file.New("./files")
+		return file.New(directory)
 	}
 
 	// Get the existing files
