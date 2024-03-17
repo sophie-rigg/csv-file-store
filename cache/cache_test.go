@@ -15,7 +15,7 @@ func TestCache_Add(t *testing.T) {
 			name: "add key to cache",
 			key:  "test",
 			startingKeys: []string{
-				"test1.csv",
+				"a8901259-d453-4ecf-9258-7230e43b1f29.csv",
 			},
 		},
 	}
@@ -51,7 +51,7 @@ func TestCache_Add(t *testing.T) {
 				t.Errorf("expected job to be completed")
 			}
 			c.Remove(tt.key)
-			complete, err = c.IsJobCompleted(tt.key)
+			_, err = c.IsJobCompleted(tt.key)
 			if err == nil {
 				t.Errorf("expected error checking if job is completed")
 			}

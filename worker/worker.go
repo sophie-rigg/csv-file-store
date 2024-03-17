@@ -84,7 +84,7 @@ func (w *Worker) Start() {
 func (w *Worker) failJob(job *Job) {
 	w.localCache.Remove(job.GetID())
 	// remove file from storage if it exists ignore error as it may not exist
-	w.newStorage().RemoveFile(job.GetID())
+	_ = w.newStorage().RemoveFile(job.GetID())
 }
 
 func (w *Worker) retryJob(job *Job) {
